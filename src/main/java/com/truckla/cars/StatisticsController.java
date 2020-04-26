@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("statistics")
+@RequestMapping("cars/statistics")
 public class StatisticsController {
 
     @Autowired
     FleetStatisticsService service;
 
-    @GetMapping(value = "/{age}")
+    @GetMapping(value = "/average-age")
     public FleetAge getCarById() {
         return service.getAverageFleetAge();
     }
