@@ -1,15 +1,16 @@
 package com.truckla.cars;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.truckla.cars.exceptions.ResourceNotFoundException;
 import com.truckla.cars.model.Car;
 import com.truckla.cars.model.Repair;
+import com.truckla.cars.model.View;
 import com.truckla.cars.repositories.CarsRepository;
 import com.truckla.cars.repositories.RepairsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("cars")
@@ -42,12 +43,13 @@ public class CarsController {
     }
 
     @GetMapping(value = "/{carId}/repairs")
+    @JsonView(View.Summary.class)
     public List<Repair> getRepairsByCarId(@PathVariable("carId") long carId) {
         return repairsRepository.findByCarId(carId);
     }
 
     @GetMapping(value = "/{carId}/repairs/{repairId}")
     public Repair getRepairById(@PathVariable("carId") long carId, @PathVariable("repairId") long repairId) {
-        return repairsRepository.findById(repairId).orElseThrow(ResourceNotFoundException::new);
+        return repairsRepository.findByIdAndCarId(repairId, carId).orElseThrow(ResourceNotFoundException::new);
     }
 }

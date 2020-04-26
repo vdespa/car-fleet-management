@@ -1,6 +1,5 @@
 package com.truckla.cars.repositories;
 
-import com.truckla.cars.model.Car;
 import com.truckla.cars.model.Repair;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,5 +10,5 @@ public interface RepairsRepository extends JpaRepository<Repair, Long> {
 
     List<Repair> findByCarId(long carId);
 
-    Optional<Repair> findById(long id);
+    Optional<Repair> findByIdAndCarId(long id, long carId);
 }

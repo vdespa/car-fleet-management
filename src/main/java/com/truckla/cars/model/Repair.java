@@ -1,6 +1,7 @@
 package com.truckla.cars.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,14 +9,16 @@ import java.util.Date;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "REPAIRS")
-@SequenceGenerator(name="seq2", initialValue=2, allocationSize=100)
+@SequenceGenerator(name="seq2", initialValue=9, allocationSize=100)
 public class Repair {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="seq")
+    @JsonView(View.Summary.class)
     private Long id;
 
     private Long carId;
 
+    @JsonView(View.Summary.class)
     private Date repair_date;
 
     private String description;
