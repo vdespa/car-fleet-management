@@ -12,7 +12,7 @@ import java.util.Date;
 @SequenceGenerator(name="seq2", initialValue=9, allocationSize=100)
 public class Repair {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="seq")
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="seq2")
     @JsonView(View.Summary.class)
     private Long id;
 
