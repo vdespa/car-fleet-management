@@ -8,8 +8,10 @@ import com.truckla.cars.model.View;
 import com.truckla.cars.repositories.CarsRepository;
 import com.truckla.cars.repositories.RepairsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,7 +30,13 @@ public class CarsController {
     }
 
     @PostMapping
-    public Car addCar(@RequestBody Car car) {
+    public Car addCar(@Valid @RequestBody Car car) {
+        return repository.save(car);
+    }
+
+    @PutMapping
+    public Car updateCar(@Validated(Car.Existing.class) @RequestBody Car car) {
+        repository.findById(car.getId()).orElseThrow(ResourceNotFoundException::new);
         return repository.save(car);
     }
 
@@ -52,4 +60,6 @@ public class CarsController {
     public Repair getRepairById(@PathVariable("carId") long carId, @PathVariable("repairId") long repairId) {
         return repairsRepository.findByIdAndCarId(repairId, carId).orElseThrow(ResourceNotFoundException::new);
     }
+
+
 }
