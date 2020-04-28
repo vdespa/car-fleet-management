@@ -9,7 +9,7 @@ import java.util.Date;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "REPAIRS")
-@SequenceGenerator(name="seq2", initialValue=9, allocationSize=100)
+@SequenceGenerator(name="seq2", initialValue=12, allocationSize=100)
 public class Repair {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="seq2")

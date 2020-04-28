@@ -1,12 +1,9 @@
 package com.truckla.cars;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.truckla.cars.exceptions.ResourceNotFoundException;
 import com.truckla.cars.model.Car;
-import com.truckla.cars.model.Repair;
-import com.truckla.cars.model.View;
 import com.truckla.cars.repositories.CarsRepository;
-import com.truckla.cars.repositories.RepairsRepository;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,50 +13,35 @@ import java.util.List;
 
 @RestController
 @RequestMapping("cars")
+@Api(description = "Manage cars", tags = { "Cars" })
 public class CarsController {
 
     @Autowired
-    private CarsRepository repository;
-
-    @Autowired
-    private RepairsRepository repairsRepository;
+    private CarsRepository carsRepository;
 
     @GetMapping
     public List<Car> getCars() {
-        return repository.findAll();
+        return carsRepository.findAll();
     }
 
     @PostMapping
     public Car addCar(@Valid @RequestBody Car car) {
-        return repository.save(car);
+        return carsRepository.save(car);
     }
 
     @PutMapping
     public Car updateCar(@Validated(Car.Existing.class) @RequestBody Car car) {
-        repository.findById(car.getId()).orElseThrow(ResourceNotFoundException::new);
-        return repository.save(car);
+        carsRepository.findById(car.getId()).orElseThrow(ResourceNotFoundException::new);
+        return carsRepository.save(car);
     }
 
     @GetMapping(value = "/{id}")
     public Car getCarById(@PathVariable("id") long id) {
-        return repository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return carsRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @DeleteMapping(value = "/{id}")
     public void removeCarById(@PathVariable("id") long id) {
-        repository.deleteById(id);
+        carsRepository.deleteById(id);
     }
-
-    @GetMapping(value = "/{carId}/repairs")
-    @JsonView(View.Summary.class)
-    public List<Repair> getRepairsByCarId(@PathVariable("carId") long carId) {
-        return repairsRepository.findByCarId(carId);
-    }
-
-    @GetMapping(value = "/{carId}/repairs/{repairId}")
-    public Repair getRepairById(@PathVariable("carId") long carId, @PathVariable("repairId") long repairId) {
-        return repairsRepository.findByIdAndCarId(repairId, carId).orElseThrow(ResourceNotFoundException::new);
-    }
-
-
 }
